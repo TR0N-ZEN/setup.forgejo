@@ -9,6 +9,11 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - FORGEJO__database__DB_TYPE=postgres
+      - FORGEJO__database__HOST=db:5432
+      - FORGEJO__database__NAME=sbetrwb
+      - FORGEJO__database__USER=sbetrwb
+      - FORGEJO__database__PASSWD=sbetrwb
     restart: always
     networks:
       - forgejo
@@ -19,3 +24,17 @@ services:
     ports:
       - '3000:3000'
       - '2222:22'
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=sbetrwb
+      - POSTGRES_PASSWORD=sbetrwb
+      - POSTGRES_DB=sbetrwb
+    networks:
+      - forgejo
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
